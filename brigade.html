@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#1a5fb4">
+  <title>Вода Донбасса - Бригада</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="brigade.css">
+</head>
+<body>
+  <div class="mobile-app">
+    <header class="mobile-header">
+      <div class="brigade-info">
+        <span class="brigade-name" id="currentBrigadeName">Бригада №1</span>
+        <span class="brigade-status" id="brigadeStatus">В работе</span>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="btn-chat" onclick="logoutBrigade()" title="Выход">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>
+          </svg>
+        </button>
+        <button class="btn-chat" onclick="openChat()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+          </svg>
+          <span class="chat-badge" id="chatBadge">0</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="mobile-content">
+      <div class="tabs">
+        <button class="tab active" data-tab="tasks" onclick="switchTab('tasks')">Задачи</button>
+        <button class="tab" data-tab="info" onclick="switchTab('info')">Инфо</button>
+      </div>
+
+      <div class="tab-content active" id="tasksTab">
+        <div class="tasks-list" id="tasksList"></div>
+      </div>
+
+      <div class="tab-content" id="infoTab">
+        <div class="info-section">
+          <h3>Состав бригады</h3>
+          <div class="members-list" id="membersList"></div>
+        </div>
+        <div class="info-section">
+          <h3>Контакт диспетчера</h3>
+          <p class="dispatcher-contact">+7-949-100-00-01</p>
+        </div>
+        <div class="info-section">
+          <h3>Смена</h3>
+          <p id="shiftTime">08:00 - 20:00</p>
+        </div>
+      </div>
+    </main>
+
+    <div class="sms-notification" id="smsNotification">
+      <div class="sms-content">
+        <div class="sms-icon">📱</div>
+        <div class="sms-text" id="smsText"></div>
+      </div>
+    </div>
+
+    <div class="chat-modal" id="chatModal">
+      <div class="chat-header">
+        <h3>Чат с диспетчером</h3>
+        <button class="close-chat" onclick="closeChat()">&times;</button>
+      </div>
+      <div class="chat-messages" id="chatMessages"></div>
+      <div class="chat-input">
+        <input type="text" id="chatInput" placeholder="Введите сообщение...">
+        <button onclick="sendMessage()">Отправить</button>
+      </div>
+    </div>
+
+    <div class="task-detail-modal" id="taskDetailModal">
+      <div class="task-detail-content">
+        <div class="task-detail-header">
+          <h3 id="taskDetailTitle">Задача</h3>
+          <button class="close-btn" onclick="closeTaskDetail()">&times;</button>
+        </div>
+        <div class="task-detail-body">
+          <div class="detail-row">
+            <label>Адрес:</label>
+            <span id="taskDetailAddress"></span>
+          </div>
+          <div class="detail-row">
+            <label>Описание:</label>
+            <span id="taskDetailDesc"></span>
+          </div>
+          <div class="detail-row">
+            <label>Приоритет:</label>
+            <span class="priority-badge" id="taskDetailPriority"></span>
+          </div>
+          <div class="detail-row">
+            <label>Статус:</label>
+            <select id="taskStatusSelect" onchange="updateTaskStatus()">
+              <option value="new">Новая</option>
+              <option value="in_progress">В работе</option>
+              <option value="completed">Выполнена</option>
+              <option value="problem">Проблема</option>
+            </select>
+          </div>
+          <div class="detail-row">
+            <label>Фото:</label>
+            <div class="task-photos" id="taskPhotos">
+              <button class="add-photo-btn" onclick="addPhoto()">+ Добавить фото</button>
+            </div>
+            <input type="file" id="photoInput" accept="image/*" multiple style="display:none" onchange="handlePhotoUpload()">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="brigade.js"></script>
+</body>
+</html>

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Вход для бригады - Вода Донбасса</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="brigade.css">
+  <style>
+    .auth-page {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #0d3b7a 0%, #1a5fb4 100%);
+      padding: 20px;
+    }
+    .auth-card {
+      background: white;
+      border-radius: 16px;
+      padding: 40px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    .auth-logo {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    .auth-logo svg {
+      width: 64px;
+      height: 64px;
+    }
+    .auth-title {
+      font-size: 24px;
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+    .auth-subtitle {
+      text-align: center;
+      color: #5e5e5e;
+      margin-bottom: 32px;
+    }
+    .auth-form .form-group {
+      margin-bottom: 20px;
+    }
+    .auth-form label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      font-size: 14px;
+    }
+    .auth-form select, .auth-form input {
+      width: 100%;
+      padding: 14px 16px;
+      border: 2px solid #deddda;
+      border-radius: 8px;
+      font-size: 15px;
+      font-family: inherit;
+    }
+    .auth-form select:focus, .auth-form input:focus {
+      outline: none;
+      border-color: #1a5fb4;
+    }
+    .auth-form .btn {
+      width: 100%;
+      padding: 14px;
+      font-size: 16px;
+      background: #1a5fb4;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-family: inherit;
+      transition: background 0.2s;
+    }
+    .auth-form .btn:hover:not(:disabled) {
+      background: #0d3b7a;
+    }
+    .auth-form .btn:disabled {
+      background: #deddda;
+      color: #5e5e5e;
+      cursor: not-allowed;
+    }
+    .auth-form button {
+      width: 100%;
+      padding: 14px 16px;
+      font-size: 16px;
+      background: linear-gradient(135deg, #1a5fb4, #0d3b7a);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-family: inherit;
+      transition: all 0.2s;
+    }
+    .auth-form button:hover:not(:disabled) {
+      background: linear-gradient(135deg, #0d3b7a, #1a5fb4);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(26, 95, 180, 0.3);
+    }
+    .auth-form button:disabled {
+      background: #deddda;
+      color: #5e5e5e;
+      cursor: not-allowed;
+    }
+    .brigade-list {
+      margin-bottom: 20px;
+    }
+    .brigade-option {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      border: 2px solid #deddda;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .brigade-option:hover {
+      border-color: #1a5fb4;
+    }
+    .brigade-option.selected {
+      border-color: #1a5fb4;
+      background: #e8f0fe;
+    }
+    .brigade-option-info {
+      flex: 1;
+    }
+    .brigade-option-name {
+      font-weight: 600;
+      font-size: 16px;
+    }
+    .brigade-option-members {
+      font-size: 12px;
+      color: #5e5e5e;
+    }
+  </style>
+</head>
+<body>
+  <div class="auth-page">
+    <div class="auth-card">
+      <div class="auth-logo">
+        <img src="logo-voda.png" alt="Вода Донбасса" style="width: 100px; height: auto;" alt="">
+        <!-- <svg viewBox="0 0 64 64" fill="none">
+          <circle cx="32" cy="32" r="28" stroke="#1a5fb4" stroke-width="3"/>
+          <path d="M20 32C20 24 26 20 32 20C38 20 44 24 44 32C44 40 38 44 32 44" stroke="#1a5fb4" stroke-width="3" stroke-linecap="round"/>
+          <path d="M32 12V20M32 44V52M12 32H20M44 32H52" stroke="#26a269" stroke-width="3" stroke-linecap="round"/>
+          <path d="M24 40L20 48M40 40L44 48" stroke="#e5a50a" stroke-width="2" stroke-linecap="round"/>
+        </svg> -->
+      </div>
+      <h1 class="auth-title">Вход для бригады</h1>
+      <p class="auth-subtitle">Выберите вашу бригаду</p>
+
+      <div class="brigade-list" id="brigadeList"></div>
+
+      <button class="btn btn-primary" onclick="loginAsBrigade()" id="loginBtn" disabled>Войти</button>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEYS = {
+      BRIGADES: 'vodadonbass_brigades',
+      CURRENT_BRIGADE: 'vodadonbass_current_brigade'
+    };
+
+    let selectedBrigadeId = null;
+
+    function init() {
+      loadBrigades();
+    }
+
+    function loadBrigades() {
+      const stored = localStorage.getItem(STORAGE_KEYS.BRIGADES);
+      const brigades = stored ? JSON.parse(stored) : [];
+      
+      const container = document.getElementById('brigadeList');
+      
+      if (brigades.length === 0) {
+        container.innerHTML = '<p style="text-align:center;color:#5e5e5e">Нет доступных бригад</p>';
+        return;
+      }
+      
+      container.innerHTML = brigades.map(b => `
+        <div class="brigade-option" onclick="selectBrigade('${b.id}', this)">
+          <div class="brigade-option-info">
+            <div class="brigade-option-name">${b.name}</div>
+            <div class="brigade-option-members">${b.members.join(', ')}</div>
+          </div>
+          <div style="color:#5e5e5e;font-size:12px">${b.shiftStart}-${b.shiftEnd}</div>
+        </div>
+      `).join('');
+    }
+
+    function selectBrigade(id, element) {
+      document.querySelectorAll('.brigade-option').forEach(el => el.classList.remove('selected'));
+      element.classList.add('selected');
+      selectedBrigadeId = id;
+      document.getElementById('loginBtn').disabled = false;
+    }
+
+    function loginAsBrigade() {
+      if (!selectedBrigadeId) return;
+      
+      localStorage.setItem(STORAGE_KEYS.CURRENT_BRIGADE, selectedBrigadeId);
+      window.location.href = 'brigade.html';
+    }
+
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>

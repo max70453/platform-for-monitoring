@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Вход - Вода Донбасса</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .auth-page {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #0d3b7a 0%, #1a5fb4 100%);
+      padding: 20px;
+    }
+    .auth-card {
+      background: white;
+      border-radius: 16px;
+      padding: 40px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    .auth-logo {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    .auth-logo svg {
+      width: 64px;
+      height: 64px;
+    }
+    .auth-title {
+      font-size: 24px;
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 8px;
+      color: var(--text-primary);
+    }
+    .auth-subtitle {
+      text-align: center;
+      color: var(--text-secondary);
+      margin-bottom: 32px;
+    }
+    .auth-form .form-group {
+      margin-bottom: 20px;
+    }
+    .auth-form label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      font-size: 14px;
+    }
+    .auth-form input {
+      width: 100%;
+      padding: 14px 16px;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      font-size: 15px;
+      transition: border-color 0.2s;
+    }
+    .auth-form input:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+    .auth-form .btn {
+      width: 100%;
+      padding: 14px;
+      font-size: 16px;
+      margin-top: 8px;
+    }
+    .auth-footer {
+      text-align: center;
+      margin-top: 24px;
+      color: var(--text-secondary);
+    }
+    .auth-footer a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .auth-footer a:hover {
+      text-decoration: underline;
+    }
+    .error-message {
+      background: #fce8e6;
+      color: var(--danger);
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      display: none;
+    }
+    .error-message.show {
+      display: block;
+    }
+    .test-credentials {
+      background: #e8f0fe;
+      border: 1px solid var(--primary);
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .test-credentials-title {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .test-credentials-content {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .test-credentials-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .test-credentials-item label {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+    .test-credentials-item span {
+      font-family: monospace;
+      background: white;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 14px;
+      cursor: pointer;
+      border: 1px solid var(--border);
+    }
+    .test-credentials-item span:hover {
+      border-color: var(--primary);
+      background: var(--primary);
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <div class="auth-page">
+    <div class="auth-card">
+      <div class="auth-logo">
+        <img src="logo-voda.png" alt="Вода Донбасса" style="width: 100px; height: auto;" alt="">
+      </div>
+      <h1 class="auth-title">Вход в систему</h1>
+      <p class="auth-subtitle">Мониторинг рабочего времени</p>
+
+      <div class="test-credentials">
+        <div class="test-credentials-title">Тестовые данные для входа</div>
+        <div class="test-credentials-content">
+          <div class="test-credentials-item">
+            <label>Логин:</label>
+            <span onclick="fillLogin('admin')">admin</span>
+          </div>
+          <div class="test-credentials-item">
+            <label>Пароль:</label>
+            <span onclick="fillPassword('admin123')">admin123</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="error-message" id="errorMessage"></div>
+
+      <form class="auth-form" id="loginForm">
+        <div class="form-group">
+          <label for="login">Логин</label>
+          <input type="text" id="login" required placeholder="Введите логин">
+        </div>
+        <div class="form-group">
+          <label for="password">Пароль</label>
+          <input type="password" id="password" required placeholder="Введите пароль">
+        </div>
+        <button type="submit" class="btn btn-primary">Войти</button>
+      </form>
+
+      <div class="auth-footer">
+        Нет аккаунта? <a href="register.html">Зарегистрироваться</a>
+        <br><br>
+        <a href="brigade-login.html" style="font-size:13px;color:var(--primary-dark)">Вход для бригады</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const USERS_KEY = 'vodadonbass_users';
+    const CURRENT_USER_KEY = 'vodadonbass_current_user';
+
+    function fillLogin(value) {
+      document.getElementById('login').value = value;
+    }
+
+    function fillPassword(value) {
+      document.getElementById('password').value = value;
+    }
+
+    // Создаем тестового пользователя при первом заупске
+    const defaultUser = {
+      id: 'user_admin',
+      fullName: 'Администратор',
+      role: 'admin',
+      login: 'admin',
+      password: 'admin123',
+      createdAt: new Date().toISOString()
+    };
+
+    const existingUsers = JSON.parse(localStorage.getItem(USERS_KEY) || '[]');
+    if (!existingUsers.find(u => u.login === 'admin')) {
+      existingUsers.push(defaultUser);
+      localStorage.setItem(USERS_KEY, JSON.stringify(existingUsers));
+    }
+
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const login = document.getElementById('login').value.trim();
+      const password = document.getElementById('password').value;
+      const errorEl = document.getElementById('errorMessage');
+
+      const users = JSON.parse(localStorage.getItem(USERS_KEY) || '[]');
+      const user = users.find(u => u.login === login && u.password === password);
+
+      if (user) {
+        localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
+        window.location.href = 'index.html';
+      } else {
+        errorEl.textContent = 'Неверный логин или пароль';
+        errorEl.classList.add('show');
+      }
+    });
+
+    document.getElementById('login').addEventListener('input', function() {
+      document.getElementById('errorMessage').classList.remove('show');
+    });
+  </script>
+</body>
+</html>

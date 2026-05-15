@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#1a5fb4">
+  <meta name="description" content="Платформа мониторинга рабочего времени выездных бригад Вода Донбасса">
+  <link rel="manifest" href="manifest.json">
+  <title>Вода Донбасса - Мониторинг рабочего времени</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-container">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="logo" style="width: 70px; height: 50px;">
+            <img src="logo-voda.png" alt="Вода Донбасса" style="width: 100%; height: auto;" alt="">
+        </div>
+        <span class="sidebar-title">Вода Донбасса</span>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="#" class="nav-item active" data-view="dashboard">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+          <span>Дашборд</span>
+        </a>
+        <a href="#" class="nav-item" data-view="brigades">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          <span>Бригады</span>
+        </a>
+        <a href="#" class="nav-item" data-view="tasks">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          <span>Задачи</span>
+        </a>
+        <a href="#" class="nav-item" data-view="calendar">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          <span>Календарь</span>
+        </a>
+        <a href="#" class="nav-item" data-view="reports">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+          <span>Отчеты</span>
+        </a>
+        <a href="#" class="nav-item" data-view="history">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span>История</span>
+        </a>
+        <a href="#" class="nav-item" data-view="templates">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+          <span>Шаблоны</span>
+        </a>
+        <a href="#" class="nav-item" data-view="chat">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <span>Чат</span>
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="version">v1.0.0</div>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="header">
+        <button class="menu-toggle" id="menuToggle">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+        </button>
+        <div class="header-title" id="pageTitle">Дашборд</div>
+        <div class="header-info">
+          <div class="current-time" id="currentTime"></div>
+          <div class="current-date" id="currentDate"></div>
+        </div>
+      </header>
+
+      <div class="content" id="content">
+        <section class="view active" id="dashboardView">
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-icon" style="background: #1a5fb4;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+              </div>
+              <div class="stat-info">
+                <div class="stat-value" id="totalBrigades">0</div>
+                <div class="stat-label">Бригад</div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon" style="background: #26a269;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+              </div>
+              <div class="stat-info">
+                <div class="stat-value" id="totalTasks">0</div>
+                <div class="stat-label">Задач</div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon" style="background: #e5a50a;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+              </div>
+              <div class="stat-info">
+                <div class="stat-value" id="totalHours">0ч</div>
+                <div class="stat-label">Отработано</div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon" style="background: #c01c28;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              </div>
+              <div class="stat-info">
+                <div class="stat-value" id="emergencyTasks">0</div>
+                <div class="stat-label">Аварийных</div>
+              </div>
+            </div>
+          </div>
+          <div class="dashboard-grid">
+            <div class="card">
+              <div class="card-header"><h3>Бригады на смене</h3></div>
+              <div class="card-body" id="brigadesOnShift"></div>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <h3>Активные задачи</h3>
+                <button class="btn btn-sm btn-primary" onclick="showAddTaskModal()">+ Задача</button>
+              </div>
+              <div class="card-body" id="activeTasks"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="view" id="brigadesView">
+          <div class="section-header">
+            <h2>Бригады</h2>
+            <button class="btn btn-primary" onclick="showAddBrigadeModal()">+ Добавить бригаду</button>
+          </div>
+          <div class="brigades-list" id="brigadesList"></div>
+        </section>
+
+        <section class="view" id="tasksView">
+          <div class="section-header">
+            <h2>Задачи</h2>
+            <button class="btn btn-primary" onclick="showAddTaskModal()">+ Добавить задачу</button>
+          </div>
+          <div class="tasks-filters">
+            <select id="taskStatusFilter" class="filter-select">
+              <option value="all">Все статусы</option>
+              <option value="new">Новые</option>
+              <option value="in_progress">В работе</option>
+              <option value="completed">Выполненные</option>
+              <option value="cancelled">Отмененные</option>
+            </select>
+            <select id="taskPriorityFilter" class="filter-select">
+              <option value="all">Все приоритеты</option>
+              <option value="emergency">Аварийный</option>
+              <option value="high">Высокий</option>
+              <option value="medium">Средний</option>
+              <option value="low">Низкий</option>
+            </select>
+          </div>
+          <div class="tasks-table-container">
+            <table class="tasks-table" id="tasksTable">
+              <thead>
+                <tr><th>Дата</th><th>Задача</th><th>Бригада</th><th>Адрес</th><th>Приоритет</th><th>Статус</th><th>Действия</th></tr>
+              </thead>
+              <tbody id="tasksTableBody"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="view" id="calendarView">
+          <div class="section-header">
+            <h2>Календарь задач</h2>
+          </div>
+          <div class="card">
+            <div class="card-body" id="calendarContainer"></div>
+          </div>
+        </section>
+
+        <section class="view" id="reportsView">
+          <div class="section-header">
+            <h2>Отчеты</h2>
+            <div class="export-buttons">
+              <button class="btn btn-secondary" id="resetBtn" onclick="resetDemoData()">Сбросить данные</button>
+              <button class="btn btn-secondary" onclick="exportToCSV()">Экспорт CSV</button>
+              <button class="btn btn-secondary" onclick="exportToPDF()">Экспорт PDF</button>
+            </div>
+          </div>
+          <div class="reports-grid">
+            <div class="card">
+              <div class="card-header"><h3>Сводка за сегодня</h3></div>
+              <div class="card-body">
+                <div class="report-item"><span>Всего задач:</span><span id="reportTotalTasks">0</span></div>
+                <div class="report-item"><span>Выполнено:</span><span id="reportCompletedTasks">0</span></div>
+                <div class="report-item"><span>В работе:</span><span id="reportInProgressTasks">0</span></div>
+                <div class="report-item"><span>Отработано часов:</span><span id="reportHours">0ч</span></div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header"><h3>Эффективность бригад</h3></div>
+              <div class="card-body" id="brigadeEfficiency"></div>
+            </div>
+          </div>
+          <div class="card" style="margin-top: 24px;">
+            <div class="card-header"><h3>Статистика за неделю</h3></div>
+            <div class="card-body" id="statisticsContainer"></div>
+          </div>
+        </section>
+
+        <section class="view" id="historyView">
+          <div class="section-header">
+            <h2>История действий</h2>
+          </div>
+          <div class="card">
+            <div class="card-body" id="historyContainer"></div>
+          </div>
+        </section>
+
+        <section class="view" id="templatesView">
+          <div class="section-header">
+            <h2>Шаблоны задач</h2>
+            <button class="btn btn-primary" onclick="showAddTemplateModal()">+ Добавить шаблон</button>
+          </div>
+          <div class="templates-grid" id="templatesContainer"></div>
+        </section>
+
+        <section class="view" id="chatView">
+          <div class="section-header">
+            <h2>Чат с бригадами</h2>
+          </div>
+          <div class="chat-admin-container">
+            <div class="chat-brigades-list" id="chatBrigadesList"></div>
+            <div class="chat-admin-messages" id="chatAdminMessages"></div>
+            <div class="chat-admin-input">
+              <input type="text" id="chatAdminInput" placeholder="Введите сообщение...">
+              <button class="btn btn-primary" onclick="sendAdminMessage()">Отправить</button>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <div class="modal" id="brigadeModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="brigadeModalTitle">Добавить бригаду</h3>
+        <button class="modal-close" onclick="closeBrigadeModal()">&times;</button>
+      </div>
+      <form id="brigadeForm">
+        <input type="hidden" id="brigadeId">
+        <div class="form-group">
+          <label for="brigadeName">Название бригады</label>
+          <input type="text" id="brigadeName" required>
+        </div>
+        <div class="form-group">
+          <label for="brigadeMembers">Состав (через запятую)</label>
+          <input type="text" id="brigadeMembers" required>
+        </div>
+        <div class="form-group">
+          <label for="brigadePhone">Телефон</label>
+          <input type="text" id="brigadePhone" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="brigadeShiftStart">Начало смены</label>
+            <input type="time" id="brigadeShiftStart" value="08:00" required>
+          </div>
+          <div class="form-group">
+            <label for="brigadeShiftEnd">Конец смены</label>
+            <input type="time" id="brigadeShiftEnd" value="20:00" required>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" onclick="closeBrigadeModal()">Отмена</button>
+          <button type="submit" class="btn btn-primary">Сохранить</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal" id="taskModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="taskModalTitle">Добавить задачу</h3>
+        <button class="modal-close" onclick="closeTaskModal()">&times;</button>
+      </div>
+      <form id="taskForm">
+        <input type="hidden" id="taskId">
+        <div class="form-group">
+          <label for="taskTitle">Название задачи</label>
+          <input type="text" id="taskTitle" required>
+        </div>
+        <div class="form-group">
+          <label for="taskDescription">Описание</label>
+          <textarea id="taskDescription" rows="3"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="taskAddress">Адрес</label>
+          <input type="text" id="taskAddress" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="taskPriority">Приоритет</label>
+            <select id="taskPriority" required>
+              <option value="low">Низкий</option>
+              <option value="medium" selected>Средний</option>
+              <option value="high">Высокий</option>
+              <option value="emergency">Аварийный</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="taskBrigade">Бригада</label>
+            <select id="taskBrigade">
+              <option value="">Не назначена</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" onclick="closeTaskModal()">Отмена</button>
+          <button type="submit" class="btn btn-primary">Сохранить</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal" id="templateModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Добавить шаблон</h3>
+        <button class="modal-close" onclick="closeTemplateModal()">&times;</button>
+      </div>
+      <form id="templateForm">
+        <div class="form-group">
+          <label for="templateTitle">Название</label>
+          <input type="text" id="templateTitle" required>
+        </div>
+        <div class="form-group">
+          <label for="templateDescription">Описание</label>
+          <textarea id="templateDescription" rows="2"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="templateAddress">Адрес (по умолчанию)</label>
+          <input type="text" id="templateAddress">
+        </div>
+        <div class="form-group">
+          <label for="templatePriority">Приоритет</label>
+          <select id="templatePriority">
+            <option value="low">Низкий</option>
+            <option value="medium" selected>Средний</option>
+            <option value="high">Высокий</option>
+            <option value="emergency">Аварийный</option>
+          </select>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" onclick="closeTemplateModal()">Отмена</button>
+          <button type="submit" class="btn btn-primary">Сохранить</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
