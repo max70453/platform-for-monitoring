@@ -340,6 +340,28 @@ body {
   border-radius: var(--radius-sm);
   color: var(--text-secondary);
   transition: all var(--transition);
+  position: relative;
+  z-index: 10;
+  min-width: 32px;
+  min-height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto !important;
+}
+
+.btn-icon:hover {
+  background: var(--background);
+  color: var(--text-primary);
+}
+
+.btn-icon[onclick*="showTaskPhotos"] {
+  color: var(--secondary);
+}
+
+.btn-icon[onclick*="showTaskPhotos"]:hover {
+  color: var(--primary);
+  background: #e6f4ea;
 }
 
 .btn-icon:hover {
@@ -350,6 +372,10 @@ body {
 .btn-icon svg {
   width: 18px;
   height: 18px;
+}
+
+.tasks-table td:last-child {
+  white-space: nowrap;
 }
 
 .brigades-list {
